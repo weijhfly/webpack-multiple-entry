@@ -1,0 +1,458 @@
+@charset "utf-8"; 
+/* css reset */
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, input, button, textarea, p, th, td {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	color: #333;
+	font-size: 0.24rem;
+	font-family: "微软雅黑", Arial;
+	-webkit-overflow-scrolling: touch;
+	background: #f5f5f5;
+	position: relative;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+img {
+	border: none;
+	vertical-align: middle;
+	max-width: 100%;
+}
+
+ol, ul, li {
+	list-style: none;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+input[type=number] {
+	-moz-appearance: textfield;
+}
+
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* 去除input默认自动填充的背景色 */
+
+input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0px 1000px white inset !important;
+	box-shadow: 0 0 0px 1000px white inset !important;
+}
+
+/* css common */
+
+.clearfix:after {
+	content: "1";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.clearfix {
+	*zoom: 1;
+}
+
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+*:before, *:after {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.clear {
+	clear: both;
+	height: 0;
+	line-height: 0;
+	overflow: hidden;
+}
+
+.fl {
+	float: left;
+}
+
+.fr {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+
+.break {
+	word-break: break-all;
+}
+
+.block {
+	display: block;
+}
+
+.relative {
+	position: relative;
+}
+
+.absolute {
+	position: absolute;
+}
+
+.center {
+	text-align: center;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.white {
+	color: #fff;
+}
+
+.none {
+	display: none;
+}
+
+.one-line {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.two-line {
+	overflow: hidden;
+	display: -webkit-box;
+	text-overflow: ellipsis;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+
+.three-line {
+	overflow: hidden;
+	display: -webkit-box;
+	text-overflow: ellipsis;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+}
+
+.orange {
+	color: #f60;
+}
+
+.gray {
+	color: #999;
+}
+
+.red {
+	color: #e53939;
+}
+
+.black {
+	color: #333;
+}
+
+.mt5 {
+	margin-top: 0.05rem;
+}
+
+.mt10 {
+	margin-top: 0.1rem;
+}
+
+.mt15 {
+	margin-top: 0.15rem;
+}
+
+.mt20 {
+	margin-top: 0.2rem;
+}
+
+.mt30 {
+	margin-top: 0.3rem;
+}
+
+.mr5 {
+	margin-right: 0.05rem;
+}
+
+.mr10 {
+	margin-right: 0.1rem;
+}
+
+.mr15 {
+	margin-right: 0.15rem;
+}
+
+.mr20 {
+	margin-right: 0.2rem;
+}
+
+.mr30 {
+	margin-right: 0.3rem;
+}
+
+.ml5 {
+	margin-left: 0.05rem;
+}
+
+.ml10 {
+	margin-left: 0.1rem;
+}
+
+.ml15 {
+	margin-left: 0.15rem;
+}
+
+.ml20 {
+	margin-left: 0.2rem;
+}
+
+.ml30 {
+	margin-left: 0.3rem;
+}
+
+.mb5 {
+	margin-bottom: 0.05rem;
+}
+
+.mb10 {
+	margin-bottom: 0.1rem;
+}
+
+.mb15 {
+	margin-bottom: 0.15rem;
+}
+
+.mb20 {
+	margin-bottom: 0.2rem;
+}
+
+.mb30 {
+	margin-bottom: 0.3rem;
+}
+
+.h110 {
+	height: 1.1rem;
+}
+
+.pl20 {
+	padding-left: 0.2rem;
+}
+
+.pr20 {
+	padding-right: 0.2rem;
+}
+
+.auto {
+	margin: 0 auto;
+}
+
+.hide {
+	display: none;
+}
+
+/*客服悬浮*/
+
+#kf {
+	padding: 0.14rem 0.1rem;
+	background: rgba(0, 0, 0, 0.8);
+	border-radius: 0.05rem 0 0 0.05rem;
+	position: fixed;
+	right: 0;
+	bottom: 2.86rem;
+	z-index: 8;
+}
+
+#kf img {
+	width: 0.6rem;
+}
+
+#kf.new {
+	animation: myfirst 3s infinite;
+	-webkit-animation: myfirst 3s infinite;
+	/* Safari 与 Chrome */
+}
+
+#kf.new>span::after {
+	content: '';
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 0.12rem;
+	height: 0.12rem;
+	background: #f90;
+	border-radius: 100%;
+}
+
+@keyframes myfirst {
+	0% {
+		background: rgba(0, 0, 0, .8);
+	}
+	100% {
+		background: rgba(163, 6, 0, .9)
+	}
+}
+
+@-webkit-keyframes myfirst
+/* Safari 与 Chrome */
+
+	{
+	0% {
+		background: rgba(0, 0, 0, .8);
+	}
+	100% {
+		background: rgba(163, 6, 0, .9)
+	}
+}
+
+#to-top {
+	display: none;
+	position: fixed;
+	right: 0;
+	bottom: 2rem;
+	padding: 0.21rem 0.16rem;
+	background: #fff;
+	border: 1px solid #d4d4d4;
+	border-radius: 0.05rem 0 0 0.05rem;
+	cursor: pointer;
+	z-index: 3;
+}
+
+#to-top .img {
+	width: 0.46rem;
+	height: 0.36rem;
+	background-position: -0.15rem -4.54rem;
+}
+
+/*公共部分*/
+
+.loadding, .no-more {
+	text-align: center;
+	padding: 0.15rem 0;
+	font-size: 0.24rem;
+	color: #999;
+}
+
+.loadding img {
+	width: 2.3rem;
+}
+
+.head-tit {
+	font-size: 0.32rem;
+	color: #fff;
+	line-height: 0.88rem;
+	height: 0.88rem;
+	position: relative;
+	background: #2892ff;
+	text-align: center;
+	overflow: hidden;
+	z-index: 2;
+}
+
+.head-tit>.return {
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 0.88rem;
+	background: url(../images/return.png) no-repeat 0.2rem center;
+	background-size: 0.16rem;
+}
+
+.floor-layer {
+	position: fixed;
+	z-index: 500;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	line-height: 0.9rem;
+	background: #d5d5d5;
+	font-size: 0.32rem;
+	color: #fff;
+	text-align: center;
+	cursor: pointer;
+}
+
+.floor-layer.blue {
+	background: #2892ff;
+}
+
+.switch-link {
+	background: #fff;
+	line-height: 0.87rem;
+	text-align: center;
+	font-size: 0.28rem;
+	color: #333;
+}
+
+.switch-link a {
+	float: left;
+	width: 50%;
+	position: relative;
+}
+
+.switch-link .active {
+	color: #2892ff;
+}
+
+.switch-link .active::after {
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 0.08rem;
+	background: #2892ff;
+	left: 0;
+	bottom: 0;
+}
+
+.fixed-center {
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	-webkit-transform: translateX(-50%) translateY(-50%);
+	-moz-transform: translateX(-50%) translateY(-50%);
+	-ms-transform: translateX(-50%) translateY(-50%);
+	transform: translateX(-50%) translateY(-50%);
+}
+
+.v-img {
+	text-align: center;
+}
+
+.v-img i {
+	display: inline-block;
+	width: 0;
+	height: 100%;
+	overflow: hidden;
+	font-size: 0;
+	line-height: 0;
+	vertical-align: middle;
+}
+
+.v-img img, .v-img video {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.v-img video {
+	vertical-align: middle;
+}

@@ -1,0 +1,27 @@
+<div class="h110"></div>
+<!---------- 底部导航 start ------------>
+<footer id="foot">
+	<ul class="flex">
+		<li class="flex1"><a href="../default/index.html"><div class="f-img ico-home"></div>首页</a></li>
+		<li class="flex1"><a href="../order/index.html"><div class="f-img ico-order"></div>订单</a></li>
+		<li class="flex1"><a href="../product/index.html"><div class="f-img ico-pro"></div>产品</a></li>
+		<li class="flex1"><a href="../assets/index.html"><div class="f-img ico-money"></div>财务</a></li>
+	</ul>
+</footer>
+<!---------- 底部导航 end ------------>
+<script>
+	(function(){
+		var url = window.location.href,
+			li = document.querySelectorAll('#foot li');
+
+		if(url.indexOf('default') != -1){
+			li[0].className = 'active flex1';
+		}else if(url.indexOf('order') != -1){
+			li[1].className = 'active flex1';
+		}else if(url.indexOf('product') != -1){
+			li[2].className = 'active flex1';
+		}else if(url.indexOf('assets') != -1){
+			li[3].className = 'active flex1';
+		}
+	}())
+</script>

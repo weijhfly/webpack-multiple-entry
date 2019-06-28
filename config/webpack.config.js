@@ -3,18 +3,22 @@ const webpack = require('webpack');
 const ROOT = process.cwd();  // 根目录
 const ENV = process.env.NODE_ENV;
 const IsProduction = (ENV === 'production') ? true : false;
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+//const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin-for-multihtml");
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const PostcssConfigPath = './config/postcss.config.js';
 const Glob = require('glob');
 const HappyPack = require('happypack');
 const HappyThreadPool = HappyPack.ThreadPool({ size: (IsProduction ? 10 : 4) });
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const staticUrl = '//cdn.com';
+const staticUrl = '/dist/';
 const publicPath = IsProduction ? staticUrl : '/';
-const extraPath = IsProduction ? '/' : '';
+const extraPath = IsProduction ? '' : '';
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 let runtime = require('art-template/lib/runtime');
+let rule = require('art-template/lib/compile/adapter/rule.art');
+let fs = require("fs");
+rule.test = /<{([@#]?)[ \t]*(\/?)([\w\W]*?)[ \t]*}>/;
 
 // @see http://aui.github.io/art-template/webpack/index.html#Filter
 // 模板变量
@@ -22,16 +26,34 @@ runtime.Date = () => {
 	return global.Date
 }
 
+//判断是否为正式环境
+global.IsProduction = IsProduction;
+runtime.IsProduction = global.IsProduction;
 
-let entryHtml = getEntryHtml('./src/view/**/*.html'),
-	entryJs = getEntry('./src/js/**/*.js'),
+//文件添加版本号，版本号为文件修改时间
+global.versions = function(url){
+	url = url.replace('..','src'); 
+
+	let v = IsProduction? (+fs.statSync(url).mtime) : Date.now();
+
+	v = String(v).substr(-8);
+
+	return url.replace('src','..') + '?'+v;
+};
+
+runtime.versions = function(){ 
+	return global.versions;
+};
+
+let entryHtml = getEntryHtml('./src/**/*.html'),
+	entryJs = getEntry('./src/**/*.js'),
 	configPlugins = [
 		// @see https://doc.webpack-china.org/plugins/provide-plugin/
 		// jQuery 设为自动加载，不必 import 或 require
-		/* new webpack.ProvidePlugin({
-			$: 'jquery',
-			jQuery: 'jquery'
-		}), */
+		//  new webpack.ProvidePlugin({
+		// 	$: 'jquery',
+		// 	Vue: 'vue'
+		// }), 
 		new webpack.optimize.ModuleConcatenationPlugin(),
 		new HappyPack({
 			id: 'js',
@@ -57,35 +79,38 @@ let entryHtml = getEntryHtml('./src/view/**/*.html'),
 		// @see https://github.com/kevlened/copy-webpack-plugin
 		new CopyWebpackPlugin([
 			{
-				from:  'src/js/lib/queries.min.js',
-				to: 'js/lib/queries.min.js'
+				from:  'src/static/js',
+				to: 'static/js'
 			},
 			{
-				from: 'src/js/lib/zepto.min.js',
-				to: 'js/lib/zepto.min.js'
+				from:  'src/static/css',
+				to: 'static/css'
 			}
 		]),
 	];
 
 // html
 entryHtml.forEach(function (v) {
+	v.multihtmlCache = true;
 	configPlugins.push(new HtmlWebpackPlugin(v));
 });
 
 // 开发环境不压缩 js
+
+// 注：这里修改了原版，取消移除console.log及取消打包分析 wjh
 if (IsProduction) {
 	configPlugins.push(new webpack.optimize.UglifyJsPlugin({
 		compress: {
 			warnings: false,
-			drop_console: true,
-			pure_funcs: ['console.log']
+			drop_console: false,
+			//pure_funcs: ['console.log']
 		}
 	}));
 } else {
 	// @see https://github.com/th0r/webpack-bundle-analyzer
-	configPlugins.push(new BundleAnalyzerPlugin({
-		openAnalyzer: false
-	}));
+	// configPlugins.push(new BundleAnalyzerPlugin({
+	// 	openAnalyzer: false
+	// }));
 }
 
 // 开发环境不压缩图片，提升热更新效率
@@ -95,7 +120,7 @@ let imageMin = [{
     limit: 100,
     publicPath: publicPath + extraPath,
     outputPath: function (path) {
-      return path.replace('src/img', 'img');
+      return path.replace('src/static/images', 'images');
     },
     name: '[path][name].[ext]?[hash:8]'
   }
@@ -132,7 +157,7 @@ const config = {
 		/* noParse: function (content) {
 			return /jquery|zepto/.test(content);
 		}, */
-		noParse: /jquery|lodash|zepto/,
+		noParse: /jquery|layer|layer|vue/,
 		rules: [
 			{
 				test: /\.js$/i,
@@ -202,7 +227,7 @@ const config = {
 	},
 	resolve: {
 		alias: {
-			views:  path.resolve(ROOT, './src/view'),
+			views:  path.resolve(ROOT, './src'),
 		}
 	},
 	plugins: configPlugins,
@@ -210,9 +235,9 @@ const config = {
 	 * @see https://doc.webpack-china.org/configuration/externals/
 	 * CDN 引入 jQuery，jQuery 不打包到 bundle 中
 	 */
-	externals: {
+	/**externals: {
 		jquery: 'jQuery'
-	},
+	},*/
 	// @see http://webpack.github.io/docs/webpack-dev-server.html
 	// @see http://www.css88.com/doc/webpack2/configuration/dev-server/
 	devServer: {
@@ -248,10 +273,10 @@ function getEntry (globPath) {
 	Glob.sync(globPath).forEach(function (entry) {
 		let basename = path.basename(entry, path.extname(entry)),
 			pathname = path.dirname(entry),
-      fileDir = pathname.split('/').splice(3).join('/');
+      fileDir = pathname.split('/').splice(2).join('/');
 
-		// js/lib/*.js 不作为入口
-		if (!entry.match(/\/js\/(lib|commons)\//)) {
+		// static/*.js 不作为入口
+		if (!entry.match(/\/static\//)) {
 			entries[(fileDir ? fileDir + '/' : fileDir) + basename] = pathname + '/' + basename;
 		}
 	});
@@ -268,7 +293,7 @@ function getEntryHtml (globPath) {
 	Glob.sync(globPath).forEach(function (entry) {
 		let basename = path.basename(entry, path.extname(entry)),
 			pathname = path.dirname(entry),
-      fileDir = pathname.split('/').splice(3).join('/'),
+      fileDir = pathname.split('/').splice(2).join('/'),
 			// @see https://github.com/kangax/html-minifier#options-quick-reference
 			minifyConfig = !IsProduction ? '' : {
 				removeComments: true,

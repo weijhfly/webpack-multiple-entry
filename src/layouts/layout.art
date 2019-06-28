@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1.0, user-scalable=0" />
+<meta content="telephone=no" name="format-detection" />
+<title>webpack多页脚手架</title>
+<link rel="stylesheet" href="<%= versions('../static/css/reset.css') %>">
+<link rel="stylesheet" href="../static/js/swiper/swiper.min.css">
+<link rel="stylesheet" href="../static/js/layer/need/layer.css">
+<script>
+    function rem(){
+        var deviceWidth = document.documentElement.clientWidth,
+            html = document.documentElement;
+
+        if(deviceWidth > 1024){
+            deviceWidth = 1024;
+            html.style.maxWidth = '1024px';
+            html.style.margin = '0 auto';
+        }
+        html.style.fontSize = deviceWidth / 7.5 + 'px';
+    }
+    rem();
+    window.addEventListener("resize", function() {
+      rem();
+    }, false);
+</script>
+</head>
+<body> 
+<{block 'content'}><{/block}>
+<script src="<{if IsProduction}>..<{/if}>/static/js/jquery-1.11.3.min.js"></script>
+<script src="<{if IsProduction}>..<{/if}>/static/js/layer/layer.js"></script>
+<script src="<{if IsProduction}>..<{/if}>/static/js/fastclick.js"></script>
+<script src="<{if IsProduction}>..<{/if}>/static/js/vue<{if IsProduction}>.min<{/if}>.js"></script>
+<script>FastClick.attach( document.body );</script>
+</body>
+</html>
